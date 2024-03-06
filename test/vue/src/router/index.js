@@ -1,0 +1,57 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Layout from "@/views/Layout.vue";
+import Cookies from "js-cookie";
+
+Vue.use(VueRouter)
+
+const routes = [
+  //   =======登录=======
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login/Login.vue')
+  },
+  //   ======主页=======
+
+  {
+    path: '/', name: 'Layout', component: Layout, redirect: '/home',
+    children: [
+      { path: 'home', name: 'Home', component: () => import('@/views/home/HomeView.vue') },
+      //   === User ===
+      { path: 'userList', name: 'UserList', component: () => import('@/views/user/User.vue') },
+      { path: 'addUser', name: 'AddUser', component: () => import('@/views/user/AddUser.vue') },
+      { path: 'editUser', name: 'EditUser', component: () => import('@/views/user/EditUser.vue') },
+      //   === Admin ===
+      { path: 'adminList', name: 'AdminList', component: () => import('@/views/admin/List.vue') },
+      { path: 'addAdmin', name: 'AddAdmin', component: () => import('@/views/admin/Add.vue') },
+      { path: 'editAdmin', name: 'EditAdmin', component: () => import('@/views/admin/Edit.vue') },
+      //   === Category ===
+      { path: 'categoryList', name: 'CategoryList', component: () => import('@/views/category/List.vue') },
+      { path: 'addCategory', name: 'AddCategory', component: () => import('@/views/category/Add.vue') },
+      { path: 'editCategory', name: 'EditCategory', component: () => import('@/views/category/Edit.vue') },
+    ]
+  },
+  {
+    path: "*",
+    component:() => import('@/views/404.vue')
+  }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
+// 路由首位
+router.beforeEach((to,from,next) =>{
+  // 如果下一个界面是login界面的话就next()放行，
+  if (to.path === '/login') next()
+  // 如果放行后从页面读取cookies不成功的话则认为是没有登录成功，则会跳转回login界面重新登录
+  const  admin = Cookies.get("admin")
+  if (!admin && to.path !== '/login') return next('/login')
+  // 访问 /home的时候，并且cookies存在数据，这时候就要直接放行
+  next()
+})
+
+export default router
