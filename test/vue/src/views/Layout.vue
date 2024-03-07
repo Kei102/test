@@ -85,6 +85,16 @@ export default {
             <el-menu-item index="/bookList">图书列表</el-menu-item>
             <el-menu-item index="/addBook">图书添加</el-menu-item>
           </el-submenu>
+
+          <el-submenu index="borrow">
+            <template slot="title">
+              <i class=" el-icon-document"></i>
+              <span>借书管理</span>
+            </template>
+            <el-menu-item index="/borrowList">借书列表</el-menu-item>
+            <el-menu-item index="/addBorrow">借书添加</el-menu-item>
+          </el-submenu>
+
         </el-menu>
       </div>
       <!--      主体数据-->
