@@ -65,9 +65,9 @@ export default {
     })
   },
   methods: {
-    handleChange(val) {
-      console.log(val)
-    },
+    // handleChange(val) {
+    //   console.log(val)
+    // },
     save() {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid){

@@ -23,7 +23,12 @@
         <el-input v-model="form.publisher" placeholder="请输入出版社"></el-input>
       </el-form-item>
       <el-form-item label="分类" prop="category">
-        <el-input v-model="form.category" placeholder="请输入分类"></el-input>
+        <el-cascader
+            style="width: 240px"
+            :props="{value: 'name', label: 'name'}"
+            v-model="form.categories"
+            :options="categories">
+        </el-cascader>
       </el-form-item>
       <el-form-item label="标准码" prop="bookNo">
         <el-input v-model="form.bookNo" placeholder="请输入标准码"></el-input>
@@ -45,6 +50,7 @@ export default {
   data() {
     return {
       form: {},
+      categories: [],
       rules: {
         name: [
           {required: true, message: '请输入图书名称', trigger: 'blur'},
@@ -53,9 +59,16 @@ export default {
     }
   },
   created() {
+    request.get('/category/tree').then(res => {
+      this.categories = res.data
+    })
     const id = this.$route.query.id
     request.get("/book/" + id).then(res => {
       this.form = res.data
+      if (this.form.category) {
+        this.form.categories = this.form.category.split(' > ')
+        console.log(this.form.categories)
+      }
     })
   },
   methods: {

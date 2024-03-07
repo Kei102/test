@@ -35,12 +35,7 @@ public class BookService implements IBookService {
 
     @Override
     public void save(Book obj) {
-        List<String> categories = obj.getCategories();
-        StringBuilder sb = new StringBuilder();
-        if (CollUtil.isNotEmpty(categories)) {
-            categories.forEach(v -> sb.append(v).append(" > "));
-        }
-        obj.setCategory(sb.toString());
+        obj.setCategory(category(obj.getCategories()));
         bookMapper.save(obj);
     }
 
@@ -51,6 +46,7 @@ public class BookService implements IBookService {
 
     @Override
     public void update(Book obj) {
+        obj.setCategory(category(obj.getCategories()));
         obj.setUpdatetime(LocalDate.now());
         bookMapper.updateById(obj);
     }
@@ -58,5 +54,14 @@ public class BookService implements IBookService {
     @Override
     public void deleteById(Integer id) {
         bookMapper.deleteById(id);
+    }
+
+    private String category(List<String> categories) {
+        StringBuilder sb = new StringBuilder();
+        if (CollUtil.isNotEmpty(categories)) {
+            categories.forEach(v -> sb.append(v).append(" > "));
+            return sb.substring(0, sb.lastIndexOf(" > "));
+        }
+        return sb.toString();
     }
 }
