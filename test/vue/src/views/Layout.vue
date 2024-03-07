@@ -76,6 +76,15 @@ export default {
             <el-menu-item index="/categoryList">分类列表</el-menu-item>
             <el-menu-item index="/addCategory">分类添加</el-menu-item>
           </el-submenu>
+
+          <el-submenu index="book">
+            <template slot="title">
+              <i class=" el-icon-notebook-1"></i>
+              图书管理
+            </template>
+            <el-menu-item index="/bookList">图书列表</el-menu-item>
+            <el-menu-item index="/addBook">图书添加</el-menu-item>
+          </el-submenu>
         </el-menu>
       </div>
       <!--      主体数据-->

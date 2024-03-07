@@ -10,6 +10,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,6 +45,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void update(Category obj) {
+        obj.setUpdatetime(LocalDate.now());
         categoryMapper.updateById(obj);
     }
 
