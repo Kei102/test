@@ -26,7 +26,7 @@ public class Borrow {
     /**
      * 用户id
      */
-    private Integer userId;
+    private String userNo;
 
     /**
      * 用户姓名

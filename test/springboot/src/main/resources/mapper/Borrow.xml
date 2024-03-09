@@ -21,12 +21,12 @@
     </select>
 
     <insert id="save">
-        insert into borrow(book_name,book_no,user_id,user_name,user_phone,score)
-        values(#{bookName}, #{bookNo}, #{userId}, #{userName}, #{userPhone}, #{score})
+        insert into borrow(book_name,book_no,user_no,user_name,user_phone,score)
+        values(#{bookName}, #{bookNo}, #{userNo}, #{userName}, #{userPhone}, #{score})
     </insert>
 
     <update id="updateById">
-        update borrow set book_name = #{bookName}, book_no = #{bookNo}, user_id = #{userId}, user_name = #{userName},
+        update borrow set book_name = #{bookName}, book_no = #{bookNo}, user_no = #{userNo}, user_name = #{userName},
                           user_phone = #{userPhone}, score = #{score},
                         updatetime = #{updatetime}
                         where id = #{id}

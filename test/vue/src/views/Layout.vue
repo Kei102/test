@@ -98,7 +98,8 @@ export default {
         </el-menu>
       </div>
       <!--      主体数据-->
-      <div style="flex: 1;background-color: white">
+<!--    width: 0可以限制子元素的无限撑开  -->
+      <div style="flex: 1;width: 0; background-color: white; padding: 10px">
         <router-view/>
       </div>
     </div>
