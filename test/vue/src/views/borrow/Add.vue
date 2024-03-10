@@ -26,6 +26,8 @@
         <el-input v-model="form.nums" disabled></el-input>
       </el-form-item>
 
+    <br />
+
       <el-form-item label="会员码" prop="userNo">
         <el-select v-model="form.userNo" filterable placeholder="请选择" @change="selUser">
           <el-option
@@ -42,6 +44,10 @@
       </el-form-item>
       <el-form-item label="用户联系方式" prop="userPhone">
         <el-input v-model="form.userPhone" disabled></el-input>
+      </el-form-item>
+
+      <el-form-item label="用户积分" prop="account">
+        <el-input v-model="form.account" disabled></el-input>
       </el-form-item>
 
     </el-form>
@@ -84,14 +90,22 @@ export default {
   methods: {
     selUser() {
       const user = this.users.find(v => v.username === this.form.userNo)
-      this.form.userName = user.name
-      this.form.userPhone = user.phone
+      request.get('/user/' + user.id).then(res => {
+        // 强制设置对象属性
+        // this.$set(this.form,'bookName',res.data.name)
+        // 1.对象 2.对象的属性名称 3.对象属性值
+        this.$set(this.form, 'userName', res.data.name)
+        this.form.userPhone = res.data.phone
+        this.form.account = res.data.account
+      })
     },
     selBookName() {
       const book = this.books.find(v => v.bookNo === this.form.bookNo)
-      this.form.bookName = book.name
-      this.form.score = book.score
-      this.form.nums = book.nums
+      request.get('/book/' + book.id).then(res => {
+        this.$set(this.form, 'bookName', res.data.name)
+        this.form.score = res.data.score
+        this.form.nums = res.data.nums
+      })
     },
     save() {
       this.$refs["ruleForm"].validate((valid) => {

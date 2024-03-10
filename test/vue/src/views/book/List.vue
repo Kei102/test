@@ -12,11 +12,12 @@
     <el-table-column prop="id" label="编号" width="80"></el-table-column>
     <el-table-column prop="name" label="图书名称"></el-table-column>
     <el-table-column prop="description" width="200" label="描述"></el-table-column>
+    <el-table-column prop="bookNo" label="标准码"></el-table-column>
     <el-table-column prop="publishDate" label="出版日期"></el-table-column>
     <el-table-column prop="author" label="作者"></el-table-column>
     <el-table-column prop="publisher" label="出版社"></el-table-column>
     <el-table-column prop="category" label="分类"></el-table-column>
-    <el-table-column prop="bookNo" label="标准码"></el-table-column>
+
     <el-table-column prop="score" label="借书积分"></el-table-column>
     <el-table-column prop="nums" label="数量"></el-table-column>
     <el-table-column prop="cover" label="封面">
