@@ -1,6 +1,6 @@
 <template>
   <div style="width: 80%">
-    <h2 style="margin-bottom: 30px;margin-left: 30px">编辑图书信息</h2>
+    <h2 style="margin-bottom: 30px;margin-left: 30px">编辑借书信息</h2>
     <el-form :inline="true" :model="form" :rules="rules" ref="ruleForm" label-width="100px">
 
       <el-form-item label="图书标准码" prop="bookNo">
@@ -15,11 +15,15 @@
       </el-form-item>
 
       <el-form-item label="图书名称" prop="bookName">
-        <el-input v-model="form.bookName" disabled placeholder="请输入名称"></el-input>
+        <el-input v-model="form.bookName" disabled ></el-input>
       </el-form-item>
 
       <el-form-item label="图书所需积分" prop="score">
         <el-input v-model="form.score" disabled></el-input>
+      </el-form-item>
+
+      <el-form-item label="图书数量" prop="nums">
+        <el-input v-model="form.bookName" disabled ></el-input>
       </el-form-item>
 
       <el-form-item label="用户码" prop="userNo">
@@ -82,6 +86,17 @@ export default {
     })
   },
   methods: {
+    selUser() {
+      const user = this.users.find(v => v.username === this.form.userNo)
+      this.form.userName = user.name
+      this.form.userPhone = user.phone
+    },
+    selBookName() {
+      const book = this.books.find(v => v.bookNo === this.form.bookNo)
+      this.form.bookName = book.name
+      this.form.score = book.score
+      this.form.nums = book.nums
+    },
     save() {
       request.put('/borrow/update',this.form).then(res => {
         if (res.code === '200') {

@@ -24,6 +24,12 @@ public class UserController {
         return Result.success();
     }
 
+    @PostMapping("/account")
+    public Result account(@RequestBody User user) {
+        userService.handleAccount(user);
+        return Result.success();
+    }
+
 
     @PutMapping("/update")
     public Result update(@RequestBody User user) {
@@ -53,4 +59,6 @@ public class UserController {
     public Result page(UserPageRequest userPageRequest) {
         return Result.success(userService.page(userPageRequest));
     }
+
+
 }

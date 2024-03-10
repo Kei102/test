@@ -58,4 +58,19 @@ public class UserService implements IUserService {
     public void deleteById(Integer id) {
         userMapper.deleteById(id);
     }
+
+    @Override
+    public void handleAccount(User user) {
+        Integer score = user.getScore();
+        if (score == null) {
+            return;
+        }
+        else {
+//            user是前端传进来的参数user，dbuser是我们数据库的user，修改数据库数据的时候要更改的是数据库的数据，若修改的是参数的数据则无用
+            Integer id = user.getId();
+            User dbUser = userMapper.getById(id);
+            dbUser.setAccount(dbUser.getAccount() + score);
+            userMapper.updateById(dbUser);
+        }
+    }
 }

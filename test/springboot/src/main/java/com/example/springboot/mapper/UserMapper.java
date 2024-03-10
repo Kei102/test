@@ -22,4 +22,6 @@ public interface UserMapper {
     void updateById(User user);
 
     void deleteById(Integer id);
+
+    User getByUsername(String username);
 }

@@ -15,14 +15,18 @@
       </el-form-item>
 
       <el-form-item label="图书名称" prop="bookName">
-        <el-input v-model="form.bookName" disabled placeholder="请输入名称"></el-input>
+        <el-input v-model="form.bookName" disabled></el-input>
       </el-form-item>
 
       <el-form-item label="图书所需积分" prop="score">
         <el-input v-model="form.score" disabled></el-input>
       </el-form-item>
 
-      <el-form-item label="用户码" prop="userNo">
+      <el-form-item label="图书数量" prop="nums">
+        <el-input v-model="form.nums" disabled></el-input>
+      </el-form-item>
+
+      <el-form-item label="会员码" prop="userNo">
         <el-select v-model="form.userNo" filterable placeholder="请选择" @change="selUser">
           <el-option
               v-for="item in users"
@@ -87,6 +91,7 @@ export default {
       const book = this.books.find(v => v.bookNo === this.form.bookNo)
       this.form.bookName = book.name
       this.form.score = book.score
+      this.form.nums = book.nums
     },
     save() {
       this.$refs["ruleForm"].validate((valid) => {
