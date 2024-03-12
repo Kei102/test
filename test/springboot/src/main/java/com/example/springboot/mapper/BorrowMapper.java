@@ -26,4 +26,6 @@ public interface BorrowMapper {
     void deleteById(Integer id);
 
     void deleteReturById(Integer id);
+
+    void updateStatus(String status ,Integer id);
 }

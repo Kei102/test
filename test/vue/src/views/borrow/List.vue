@@ -33,7 +33,7 @@
 
     <el-table-column label="管理">
       <template v-slot="scope">
-        <el-button type="primary" @click="returnBooks(scope.row)">还书</el-button>
+        <el-button type="primary" @click="returnBooks(scope.row)" v-if="scope.row.status === '已借出'">还书</el-button>
       </template>
     </el-table-column>
 
@@ -127,7 +127,14 @@ export default {
       })
     },
     returnBooks(row) {
-      
+      request.post("/borrow/saveRetur", row).then(res => {
+        if (res.code === '200') {
+          this.$notify.success('还书成功')
+          this.load()
+        } else {
+          this.$notify.error(msg)
+        }
+      })
     }
   }
 }

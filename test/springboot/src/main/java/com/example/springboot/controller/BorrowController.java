@@ -58,15 +58,16 @@ public class BorrowController {
     @GetMapping("/pageRetur")
         public Result pageRetur(BorrowPageRequest pageRequest) { return Result.success(borrowService.pageRetur(pageRequest)); }
 
-    @GetMapping("/saveRetur")
+
+    @PostMapping("/saveRetur")
     public Result saveRetur(@RequestBody Retur obj){
         borrowService.saveRetur(obj);
         return Result.success();
     }
 
-    @GetMapping("/deleteRetur/{id}")
+    @DeleteMapping("/deleteRetur/{id}")
     public Result deleteRetur(@PathVariable Integer id) {
-        borrowService.deleteById(id);
+        borrowService.deleteReturById(id);
         return Result.success();
     }
 }

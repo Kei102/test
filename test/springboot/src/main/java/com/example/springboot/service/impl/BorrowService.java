@@ -20,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -108,9 +106,35 @@ public class BorrowService implements IBorrowService {
         borrowMapper.save(obj);
     }
 
+
+//    还书
+    @Transactional
     @Override
     public void saveRetur(Retur obj) {
+        // 改状态
+        obj.setStatus("已归还");
+        borrowMapper.updateStatus("已归还", obj.getId()); //通过用户借书的id去归还图书，前端传来的借书id
+
+        // 图书数量增加
+//        obj.setId(null);  //新数据
+        obj.setRealDate(LocalDate.now());
         borrowMapper.saveRetur(obj);
+        bookMapper.updateNumByNo(obj.getBookNo());
+
+        //返回用户积分
+        Book book = bookMapper.getByNo(obj.getBookNo());
+        if (book != null) {
+            long until = 0;
+            if (obj.getRealDate().isBefore(obj.getReturnDate())) {
+                until = obj.getRealDate().until(obj.getReturnDate(), ChronoUnit.DAYS);
+            } else if (obj.getRealDate().isAfter(obj.getReturnDate())) {  //逾期归还  需要扣除额外的积分
+                until = -obj.getReturnDate().until(obj.getRealDate(), ChronoUnit.DAYS);
+            }
+            int score = (int) until * book.getScore();
+
+            //用户更新积分
+            userMapper.updateByUserNo(score, obj.getUserNo());
+        }
     }
 
     @Override

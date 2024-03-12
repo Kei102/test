@@ -22,4 +22,7 @@ public interface BookMapper {
     void deleteById(Integer id);
 
     Book getByNo(String bookNo);
+
+    void updateNumByNo(String bookNo);
+
 }
