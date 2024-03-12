@@ -3,6 +3,7 @@ package com.example.springboot.service.impl;
 import com.example.springboot.controller.request.BaseRequest;
 import com.example.springboot.entity.Book;
 import com.example.springboot.entity.Borrow;
+import com.example.springboot.entity.Retur;
 import com.example.springboot.entity.User;
 import com.example.springboot.exception.ServiceException;
 import com.example.springboot.mapper.BookMapper;
@@ -18,8 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -42,8 +46,28 @@ public class BorrowService implements IBorrowService {
     @Override
     public PageInfo<Borrow> page(BaseRequest baseRequest) {
         PageHelper.startPage(baseRequest.getPageNum(),baseRequest.getPageSize());
-//        自关联查询
-        return new PageInfo<>(borrowMapper.listByCondition(baseRequest));
+        List<Borrow> borrows = borrowMapper.listByCondition(baseRequest);
+        for (Borrow borrow : borrows) {
+            LocalDate returnDate = borrow.getReturnDate();
+            LocalDate now = LocalDate.now();
+            if (now.plusDays(1).isEqual(returnDate)) { //当前日期比归还日期小一天
+                borrow.setNote("即将到期");
+            } else if (now.isEqual(returnDate)) {
+                borrow.setNote("已到期");
+            } else if (now.isAfter(returnDate)) {
+                borrow.setNote("已过期");
+            }else {
+                borrow.setNote("正常");
+            }
+        }
+        return new PageInfo<>(borrows);
+    }
+
+    @Override
+    public PageInfo<Retur> pageRetur(BaseRequest baseRequest) {
+        PageHelper.startPage(baseRequest.getPageNum(),baseRequest.getPageSize());
+        List<Retur> returs = borrowMapper.listReturByCondition(baseRequest);
+        return new PageInfo<>(returs);
     }
 
     @Override
@@ -61,16 +85,16 @@ public class BorrowService implements IBorrowService {
             throw new ServiceException("所借图书不存在");
         }
 
-        Integer account = user.getAccount();
-        Integer score = book.getScore();
-
-//        3.校验用户账户余额
-        if (score > account) {
-            throw new ServiceException("用户积分不足，请充值！");
-        }
-//        4.校验图书的数量
+//        3.校验图书的数量
         if (book.getNums() < 1) {
             throw new ServiceException("图书数量不足");
+        }
+
+        Integer account = user.getAccount();
+        Integer score = book.getScore() * obj.getDays(); // score = 借一本 * 天数
+//        4.校验用户账户余额
+        if (score > account) {
+            throw new ServiceException("用户积分不足，请充值！");
         }
 //        5.更新账户的余额
         user.setAccount(user.getAccount() - score);
@@ -79,8 +103,14 @@ public class BorrowService implements IBorrowService {
 //        6.更新图书的数量
         book.setNums(book.getNums() - 1);
         bookMapper.updateById(book);
+        obj.setReturnDate(LocalDate.now().plus(obj.getDays(), ChronoUnit.DAYS)); //当前的日期加days 得到归还的日期
 //        7.新增借书记录
         borrowMapper.save(obj);
+    }
+
+    @Override
+    public void saveRetur(Retur obj) {
+        borrowMapper.saveRetur(obj);
     }
 
     @Override
@@ -98,5 +128,10 @@ public class BorrowService implements IBorrowService {
     public void deleteById(Integer id) {
         borrowMapper.deleteById(id);
     }
-    
+
+    @Override
+    public void deleteReturById(Integer id) {
+        borrowMapper.deleteReturById(id);
+    }
+
 }

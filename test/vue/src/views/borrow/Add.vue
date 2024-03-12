@@ -46,8 +46,12 @@
         <el-input v-model="form.userPhone" disabled></el-input>
       </el-form-item>
 
-      <el-form-item label="用户积分" prop="account">
+      <el-form-item label="用户账户积分" prop="account">
         <el-input v-model="form.account" disabled></el-input>
+      </el-form-item>
+
+      <el-form-item label="借出天数" prop="days">
+        <el-input-number v-model="form.days" :min="1" :max="30"  label="借出天数"></el-input-number>
       </el-form-item>
 
     </el-form>
@@ -63,7 +67,7 @@ export default {
   name: "AddBorrow",
   data() {
     return {
-      form: {},
+      form: {days: 1},
       books: [],
       users: [],
       categories: [],

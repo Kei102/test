@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
-public class Borrow {
+public class Retur {
     /**
      * id
      */
@@ -71,4 +70,9 @@ public class Borrow {
 
 //    提醒状态 即将到期（-1）  已到期（当天）  已过期（超过归还日期之后）
     private String note;
+
+    /**
+     * 实际归还日期
+     */
+    private LocalDate realDate;
 }
