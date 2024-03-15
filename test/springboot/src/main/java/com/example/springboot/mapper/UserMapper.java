@@ -26,5 +26,4 @@ public interface UserMapper {
 
     User getByUsername(String username);
 
-    void updateByUserNo(@Param("score") int score,@Param("userNo") String userNo);
 }
